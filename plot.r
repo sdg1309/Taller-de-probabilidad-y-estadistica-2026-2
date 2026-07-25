@@ -16,7 +16,7 @@ dt <- data.frame(
 
 # Ejemplo simple de plot
 plot(
-  x = 1:nrow(dt),
+  x = seq_len(nrow(dt)),
   y = dt$valor,
   type = "b",
   col = "steelblue",
