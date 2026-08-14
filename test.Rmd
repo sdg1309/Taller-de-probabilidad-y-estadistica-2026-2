@@ -1,0 +1,49 @@
+---
+title: "Prueba R Markdown"
+author: "Santi"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+---
+
+# Introducción
+
+Archivo de prueba para ejecutar y renderizar.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## Resumen de datos
+
+```{r summary}
+summary(cars)
+```
+
+## Gráfico ejemplo
+
+```{r plot}
+plot(cars, main = "Velocidad vs Distancia (cars)")
+```
+
+## Render desde R
+
+Puedes renderizar en R con:
+
+```r
+rmarkdown::render("test.Rmd")
+```
+
+O desde PowerShell:
+
+```powershell
+Rscript -e "rmarkdown::render('test.Rmd')"
+```
+
+Si no tienes `rmarkdown` instalado, instálalo con:
+
+```r
+install.packages("rmarkdown")
+```

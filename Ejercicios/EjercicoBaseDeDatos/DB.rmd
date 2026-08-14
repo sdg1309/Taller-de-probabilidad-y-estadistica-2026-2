@@ -1,0 +1,49 @@
+---
+title: "Prueba R Markdown Para base de datos"
+author: "Santi"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+---
+
+# Analisis de Datos Sobre Estatura y Peso
+
+## Base de datos
+
+```{r setup, include=FALSE}
+
+library(readxl)
+
+ruta <- "C:/Users/santi/Desktop/Uni/Probabilidad y estadistica/Taller/Ejercicios/EjercicoBaseDeDatos/Estatura y peso 2026.xlsx"
+
+dt <- read_excel(ruta, sheet = 1)
+
+```
+
+Esta base de datos esta basada en 2 variables, estatura y peso.
+
+### Primeras 6 filas de la base de datos
+```{r 6data}
+    head(dt, 6)
+```
+
+### Calculos
+
+```{r summary}
+summary(dt)
+```
+
+El resumen muestra la tendencia central y la dispersión de las variables. En particular, se puede observar el valor mínimo, el máximo, la mediana y la media, lo que permite tener una primera idea de cómo se distribuyen los datos de estatura y peso. Si la media y la mediana son cercanas, la distribución es más equilibrada; si existen diferencias grandes, puede haber valores atípicos o sesgo en los datos.
+
+### Histogramas
+```{r histograma}
+h1 <- hist(dt$ESTATURA,
+           main = "Histograma de Estatura",
+           xlab = "Estatura (cm)",
+           ylab = "Frecuencia",
+           col = "lightblue",
+           border = "black")
+h1
+```
