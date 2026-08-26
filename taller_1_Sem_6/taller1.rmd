@@ -1,0 +1,192 @@
+---
+title: "Taller 1 - Exploración de Datos"
+author: "Santiago Duque Gil / Milton"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+---
+
+# Analisis de Datos Sobre Estatura y Peso
+
+## Base de datos
+
+```{r setup, include=FALSE}
+
+ruta <- "C:\\Users\\santi\\Desktop\\Uni\\Probabilidad y estadistica\\Taller\\taller_1_Sem_6\\BankChurners.csv"
+
+dt <- read.csv(ruta)
+
+```
+
+Esta base de datos es sobre clientes de banco.
+
+### Analicemos la base de datos, y describamosla.
+
+Comencemos con una pequeña exploracion de los datos en la base de datos.
+```{r 6data}
+    head(dt, 6) # Primeros 6 registros
+    nrow(dt)   # número de filas
+    ncol(dt)   # número de columnas
+```
+
+Con esta primera parte podemos idientificar que la base de datos es de 23 columnas y 10127 filas.
+Ahora vamos a identificar que tipo de variables hay en la base de datos.
+
+
+### Identificación de variables cualitativas y cuantitativas
+
+Usando el siguiente código podemos identificar que variables son cualitativas y cuales son cuantitativas.
+```{r cualitativas_cuantitativas}
+
+dt2 <- dt
+
+cols_cualitativas <- names(dt2)[sapply(dt2, function(x) is.character(x) | is.factor(x))]
+
+cols_cuantitativas <- names(dt2)[sapply(dt2, function(x) is.numeric(x) | is.integer(x))]
+
+dt_cualitativas <- dt2[, cols_cualitativas, drop = FALSE]
+dt_cuantitativas <- dt2[, cols_cuantitativas, drop = FALSE]
+```
+
+Con el codigo anterior podemos idintificar las siguientes variables cualitativas y cuantitativas.
+
+Las cualitativas son:
+```{r cualitativas}
+names(dt_cualitativas)
+```
+
+Las cuantitativas son:
+```{r cuantitativas}
+names(dt_cuantitativas)
+```
+
+## Calculos de medidas de tendencia central y dispersión
+
+Luego de la pequeña exploracion de la base de datos, podemos realizar algunos calculos de medidas de tendencia central y dispersión para las variables cuantitativas.
+Esto, con los parametros requeridos de: `Customer_Age`, `Avg_Open_To_Buy` y `Credit_Limit`.
+
+```{r summary}
+
+ten <- dt[, c("Customer_Age", "Avg_Open_To_Buy", "Credit_Limit")]
+
+summary(ten)
+
+```
+```{r moda}
+
+moda <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+moda(dt$Customer_Age)
+moda(dt$Avg_Open_To_Buy)
+moda(dt$Credit_Limit)
+```
+
+De las medidas anteriores, podemos concluir lo siguiente:
+
+1) Customer_Age
+La moda es 44 años, lo que indica que la edad más frecuente entre los clientes es 44. La edad central es 46 años, y la media es 46.33 años.
+El 50% de los clientes tiene entre 41 y 52 años.
+El mínimo es 26 y el máximo 73, por lo que la variable tiene un rango amplio, pero la distribución está bastante concentrada alrededor de 46.
+Como la media y la mediana son casi iguales, la distribución es relativamente equilibrada.
+
+2) Avg_Open_To_Buy
+La moda es 1438.3, lo que indica que el valor más frecuente de la apertura de crédito disponible es aproximadamente 1438.3. La mediana es 3474, pero la media es 7469.
+Esto indica que hay valores muy altos que elevan la media, por lo que la distribución está sesgada a la derecha.
+El primer cuartil es 1324 y el tercero es 9859, lo que muestra que la mayoría de los clientes tienen valores moderados, pero algunos tienen montos mucho mayores.
+El máximo de 34516 sugiere presencia de valores atípicos o clientes con muy alta capacidad de crédito disponible.
+
+3) Credit_Limit
+La moda es 34516, lo que indica que el valor más repetido en el límite de crédito es 34516. La mediana es 4549 y la media es 8632.
+El 50% de los clientes tiene un límite entre 2555 y 11068.
+El máximo es 34516, nuevamente indicando distribución sesgada y datos altos muy alejados del centro.
+En general, la mayoría de los clientes tiene límites de crédito relativamente bajos, pero hay algunos con valores mucho más altos.
+
+### Tabla de frecuencias y porcentaje de hombres y mujeres
+
+```{r gender_frecuencia}
+# Frecuencia de la variable Gender
+freq_gender <- table(dt$Gender)
+freq_gender
+
+# Porcentaje de hombres y mujeres
+prop_gender <- round(prop.table(freq_gender) * 100, 2)
+prop_gender
+```
+
+La variable `Gender` muestra la cantidad de clientes hombres y mujeres en la base de datos. La tabla de frecuencias permite observar cuántos individuos pertenecen a cada categoría, mientras que el porcentaje indica la proporción relativa de cada grupo dentro del total de clientes. En este caso, se puede determinar el porcentaje de hombres y mujeres para describir la distribución demográfica de la muestra.
+
+### Tabla de frecuencias cruzada entre Educational_Level y Gender
+
+```{r cruzada_educ_gender}
+# Tabla de frecuencias cruzada
+freq_cruzada <- table(dt$Gender, dt$Education_Level)
+freq_cruzada
+
+# Porcentaje por filas (genero)
+prop_filas <- round(prop.table(freq_cruzada, margin = 1) * 100, 2)
+prop_filas
+
+# Porcentaje por columnas (nivel educativo)
+prop_columnas <- round(prop.table(freq_cruzada, margin = 2) * 100, 2)
+prop_columnas
+```
+
+La tabla cruzada entre `Gender` y `Education_Level` permite observar cómo se distribuyen los clientes según su género en cada nivel educativo. Si se analiza por filas, se compara la composición educativa dentro de cada género; si se analiza por columnas, se compara la distribución de género dentro de cada nivel educativo. Esto ayuda a identificar si existe alguna relación entre el nivel educativo y el género de los clientes.
+
+### Desviación estándar de Credit_Limit
+
+```{r sd_credit}
+desviacion_credit <- sd(dt$Credit_Limit, na.rm = TRUE)
+desviacion_credit
+```
+
+La desviación estándar de `Credit_Limit` mide la dispersión de los valores alrededor de la media. Si la desviación es alta, significa que los límites de crédito presentan mucha variabilidad entre los clientes; si es baja, los valores están más concentrados alrededor del promedio. En este caso, la desviación estándar indica la extensión de la variabilidad en los límites de crédito de la base de datos.
+
+### Histogramas para Credit_Limit, Customer_Age y Avg_Open_To_Buy
+
+```{r histogramas}
+par(mfrow = c(1, 3))
+
+hist(dt$Credit_Limit,
+     main = "Histograma de Credit_Limit",
+     xlab = "Límite de crédito",
+     col = "steelblue",
+     border = "black")
+
+hist(dt$Customer_Age,
+     main = "Histograma de Customer_Age",
+     xlab = "Edad",
+     col = "lightgreen",
+     border = "black")
+
+hist(dt$Avg_Open_To_Buy,
+     main = "Histograma de Avg_Open_To_Buy",
+     xlab = "Apertura promedio de compra",
+     col = "salmon",
+     border = "black")
+```
+
+Los histogramas permiten visualizar la forma de la distribución de las variables cuantitativas. `Credit_Limit` muestra cómo se distribuyen los límites de crédito entre los clientes, `Customer_Age` refleja la concentración de las edades y `Avg_Open_To_Buy` evidencia si la apertura promedio de compra está sesgada o presenta valores atípicos. Este tipo de gráficas resulta útil para identificar patrones, asimetrías y valores extremos.
+
+### Probabilidad de cada nivel educativo
+
+```{r prob_educ}
+# Frecuencia de cada nivel educativo
+freq_edu <- table(dt$Education_Level)
+freq_edu
+
+# Probabilidad de cada nivel educativo
+prob_edu <- round(prop.table(freq_edu) * 100, 2)
+prob_edu
+```
+
+La probabilidad de cada nivel educativo se obtiene dividiendo la frecuencia de cada categoría entre el total de clientes. Esto permite identificar qué tan frecuente es cada nivel educativo dentro de la base de datos. Un nivel educativo con mayor probabilidad indica que es más predominante entre los clientes, mientras que uno con menor probabilidad aparece con menor frecuencia.
+
+## Conclusión general
+
+En general, la base de datos presenta una muestra de clientes con diferentes edades, niveles educativos y límites de crédito. Las medidas descriptivas muestran que la variable `Customer_Age` se concentra alrededor de los 46 años, mientras que `Credit_Limit` y `Avg_Open_To_Buy` presentan una mayor variabilidad y evidencia de valores altos. Además, la distribución por género y nivel educativo permite describir la composición de la muestra de forma más detallada. Los histogramas complementan este análisis mostrando la forma de las distribuciones y ayudando a identificar sesgos o valores extremos.
