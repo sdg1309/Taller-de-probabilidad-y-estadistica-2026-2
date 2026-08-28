@@ -1,0 +1,119 @@
+# Distribución de Poisson
+
+## ¿Qué es?
+La distribución de Poisson modela el número de eventos que ocurren en un intervalo de tiempo o espacio, cuando esos eventos aparecen de forma aleatoria e independiente.
+
+Se usa para contar eventos, por ejemplo:
+- número de llamadas en una hora,
+- clientes que llegan a una tienda,
+- defectos en una tela,
+- accidentes en un día.
+
+## Parámetro
+Si $X$ sigue una Poisson, se escribe:
+
+$$
+X \sim Poisson(\lambda)
+$$
+
+donde $\lambda$ es el promedio de eventos esperados en ese intervalo.
+
+## Fórmula
+La probabilidad de que ocurran exactamente $k$ eventos es:
+
+$$
+P(X = k) = \frac{e^{-\lambda} \lambda^k}{k!}
+$$
+
+- $k = 0,1,2,3,...$
+- $e \approx 2.718$
+- $k!$ es el factorial de $k$
+
+## Media y varianza
+Para una distribución de Poisson:
+
+$$
+E(X) = \lambda
+$$
+
+$$
+Var(X) = \lambda
+$$
+
+## Ejemplo 1
+Supongamos que en promedio llegan 4 llamadas por hora.
+
+Entonces $\lambda = 4$ y la probabilidad de recibir exactamente 3 llamadas es:
+
+$$
+P(X = 3) = \frac{e^{-4} 4^3}{3!}
+$$
+
+$$
+P(X = 3) \approx 0.195
+$$
+
+Hay una probabilidad de 19.5% de recibir exactamente 3 llamadas.
+
+## Ejemplo 2
+Si un fabricante detecta en promedio 2 defectos por metro de tela, la probabilidad de encontrar exactamente 1 defecto es:
+
+$$
+P(X = 1) = \frac{e^{-2} 2^1}{1!}
+$$
+
+$$
+P(X = 1) \approx 0.271
+$$
+
+Es decir, hay aproximadamente 27.1% de probabilidad.
+
+## Ejemplo en R
+``` {r ejemplo1}
+dpois(3, lambda = 4)
+```
+
+``` {r ejemplo2}
+ppois(3, lambda = 4)
+```
+
+``` {r ejemplo3}
+
+rpois(10, lambda = 4)
+```
+
+## Ejemplos de clase
+
+1) A un almacen entran a comprar en promedio 8 personas cada hora, cual es la probabilidad de: A) En la proxima hora entre a comprar 5 personas, B) en la proxima hora entren a comprar a lo sumo 5 personas, C)en la proxima hora entren a comprar al menos 5 personas. D) en las proximas horas 2 horas entren a comprar 5 al menos 10 personas 
+
+```{r ejemploClase1}
+lambda_1h <- 8   # personas por hora
+lambda_2h <- 8 * 2 # personas en 2 horas
+
+# --- A) P(X = 5) en la próxima hora ---
+
+prob_a <- dpois(5, lambda_1h)
+cat("A) P(X = 5) =", round(prob_a, 4), "\n")
+
+# --- B) P(X <= 5) en la próxima hora ---
+
+prob_b <- ppois(5, lambda_1h)
+cat("B) P(X <= 5) =", round(prob_b, 4), "\n")
+
+# --- C) P(X >= 5) en la próxima hora ---
+
+prob_c <- 1 - ppois(4, lambda_1h)
+cat("C) P(X >= 5) =", round(prob_c, 4), "\n")
+
+# --- D) P(X >= 10) en las próximas 2 horas (lambda = 16) ---
+
+prob_d <- 1 - ppois(9, lambda_2h)
+cat("D) P(X >= 10) en 2 horas =", round(prob_d, 4), "\n")
+
+resultados <- data.frame(
+  Parte = c("A", "B", "C", "D"),
+  Evento = c("X = 5 (1h)", "X <= 5 (1h)", "X >= 5 (1h)", "X >= 10 (2h)"),
+  Probabilidad = round(c(prob_a, prob_b, prob_c, prob_d), 4)
+)
+print(resultados)
+```

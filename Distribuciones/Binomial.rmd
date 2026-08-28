@@ -1,0 +1,183 @@
+# Distribución Binomial
+
+## ¿Qué es la distribución binomial?
+
+La distribución binomial es una distribución de probabilidad discreta que describe el número de éxitos que se obtienen en un conjunto fijo de ensayos aleatorios.
+
+Se utiliza cuando se realizan varias pruebas independientes, y cada prueba tiene solo dos resultados posibles:
+
+- Éxito
+- Fracaso
+
+Por ejemplo:
+
+- lanzar una moneda y observar si sale cara o sello,
+- revisar si un producto cumple o no con una especificación,
+- responder una pregunta de opción múltiple y acertar o fallar.
+
+
+## Variables y parámetros
+
+Si una variable aleatoria X sigue una distribución binomial, se escribe:
+
+$$
+X \sim Binomial(n, p)
+$$
+
+donde:
+
+- $n$ = número total de ensayos,
+- $p$ = probabilidad de éxito en cada ensayo,
+- $q = 1 - p$ = probabilidad de fracaso.
+
+La variable $X$ representa el número total de éxitos en los $n$ ensayos.
+
+
+## Fórmula de la distribución binomial
+
+La probabilidad de obtener exactamente $k$ éxitos en $n$ ensayos es:
+
+$$
+P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}
+$$
+
+donde:
+
+$$
+\binom{n}{k} = \frac{n!}{k!(n-k)!}
+$$
+
+es el número de combinaciones posibles de elegir $k$ éxitos entre $n$ ensayos.
+
+
+## Supuestos de la distribución binomial
+
+Para que una variable se modele con una distribución binomial, deben cumplirse estas condiciones:
+
+1. Se realizan un número fijo de ensayos $n$.
+2. Cada ensayo tiene solo dos resultados posibles: éxito o fracaso.
+3. La probabilidad de éxito $p$ es constante en cada ensayo.
+4. Los ensayos son independientes entre sí.
+
+
+## Media y varianza
+
+La distribución binomial tiene las siguientes medidas:
+
+- Media: $$E(X) = np$$
+- Varianza: $$Var(X) = np(1-p)$$
+- Desviación estándar: $$\sigma = \sqrt{np(1-p)}$$
+
+Estas fórmulas son muy útiles para interpretar el comportamiento de la variable aleatoria.
+
+## Ejemplo sencillo
+
+Supongamos que lanzamos una moneda 5 veces y queremos saber la probabilidad de obtener exactamente 3 caras.
+
+Entonces:
+
+- $n = 5$
+- $p = 0.5$
+- $k = 3$
+
+Aplicando la fórmula:
+
+$$
+P(X = 3) = \binom{5}{3}(0.5)^3(0.5)^2
+$$
+
+$$
+P(X = 3) = 10 \cdot 0.125 \cdot 0.25 = 0.3125
+$$
+
+Por lo tanto, la probabilidad de obtener exactamente 3 caras en 5 lanzamientos es:
+
+$$
+P(X = 3) = 0.3125
+$$
+
+Esto significa que hay un 31.25% de probabilidad de obtener 3 caras.
+
+
+## Interpretación
+
+La distribución binomial nos ayuda a responder preguntas como:
+
+- ¿Cuál es la probabilidad de obtener 4 éxitos en 10 intentos?
+- ¿Cuántos éxitos esperamos en promedio?
+- ¿Qué tan dispersos son los resultados?
+
+Es una herramienta muy útil cuando el interés está en contar cuántas veces ocurre un evento de interés.
+
+## Ejemplos en R
+
+```{r ejemplo1}
+p <- 0.5
+ex <- 3
+en <- 5
+
+# Probabilidad de obtener exactamente 3 éxitos en 5 ensayos
+# con probabilidad de éxito p = 0.5
+dbinom(ex, size = en, prob = p)
+```
+
+```{r ejemplo2}
+# Probabilidad acumulada de obtener 3 o menos éxitos
+pbinom(ex, size = en, prob = p)
+```
+
+```{r ejemplo3}
+# Generar 10 valores aleatorios de una distribución binomial
+rbinom(10, size = en, prob = p)
+```
+
+## Ejemplos de clase
+1) El 60% les gusta cierta marca de gaseosas, se selecciona 8 personas de dicha universidad, cual es la probabilidad de: A) a 3 personas les guste la gaseosa. B)a lo sumo a 3 personas les gusta la gaseosa. C)al men os a 3 personas les gusta la gaseosa
+
+```{r ejemploC1}
+n <- 8
+p <- 0.6
+
+# A) P(X = 3)
+p_a <- dbinom(3, size = n, prob = p)
+p_a
+
+# B) P(X <= 3)  -> "a lo sumo 3"
+p_b <- pbinom(3, size = n, prob = p)
+p_b
+
+# C) P(X >= 3)  -> "al menos 3"
+p_c <- 1 - pbinom(2, size = n, prob = p)
+p_c
+```
+
+2) Una enfermedad tiene una tasa de mortalidad del 70% a un hospital llegan 15 pacientes con dicha enfermedad. cual es la probabilidad de. A) 8 personas amanezcan muertas, B) a lo sumo 8 pacientes amanezcan muertos. C) almenos 8 pacientes se mueran, D) todos se mueran. E) ninguno se muera
+```{r ejemploC2}
+n <- 15
+p <- 0.7
+
+# A) P(X = 8)
+
+p_a <- dbinom(8, size = n, prob = p)
+p_a
+
+# B) P(X <= 8)  -> "a lo sumo 8"
+
+p_b <- pbinom(8, size = n, prob = p)
+p_b
+
+# C) P(X >= 8)  -> "al menos 8"
+
+p_c <- 1 - pbinom(7, size = n, prob = p)
+p_c
+
+# D) P(X = 15)  -> "todos mueren"
+
+p_d <- dbinom(15, size = n, prob = p)
+p_d
+
+# E) P(X = 0)  -> "ninguno muere"
+
+p_e <- dbinom(0, size = n, prob = p)
+p_e
+```
