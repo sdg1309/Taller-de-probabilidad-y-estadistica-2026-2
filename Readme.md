@@ -9,3 +9,5 @@
 - [Estadastica](temas/estadistica.md)
 - [Conceptos basicos](temas/conceptos_basicos.md)
 - [Medidas de tendencia central](temas/medidas_tendencia_central.md)
+
+SHINY investigar!
