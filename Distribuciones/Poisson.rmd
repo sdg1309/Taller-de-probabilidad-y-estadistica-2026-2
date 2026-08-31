@@ -69,51 +69,11 @@ $$
 Es decir, hay aproximadamente 27.1% de probabilidad.
 
 ## Ejemplo en R
-``` {r ejemplo1}
+```r
 dpois(3, lambda = 4)
-```
-
-``` {r ejemplo2}
 ppois(3, lambda = 4)
-```
-
-``` {r ejemplo3}
-
 rpois(10, lambda = 4)
 ```
 
-## Ejemplos de clase
-
-1) A un almacen entran a comprar en promedio 8 personas cada hora, cual es la probabilidad de: A) En la proxima hora entre a comprar 5 personas, B) en la proxima hora entren a comprar a lo sumo 5 personas, C)en la proxima hora entren a comprar al menos 5 personas. D) en las proximas horas 2 horas entren a comprar 5 al menos 10 personas 
-
-```{r ejemploClase1}
-lambda_1h <- 8   # personas por hora
-lambda_2h <- 8 * 2 # personas en 2 horas
-
-# --- A) P(X = 5) en la próxima hora ---
-
-prob_a <- dpois(5, lambda_1h)
-cat("A) P(X = 5) =", round(prob_a, 4), "\n")
-
-# --- B) P(X <= 5) en la próxima hora ---
-
-prob_b <- ppois(5, lambda_1h)
-cat("B) P(X <= 5) =", round(prob_b, 4), "\n")
-
-# --- C) P(X >= 5) en la próxima hora ---
-
-prob_c <- 1 - ppois(4, lambda_1h)
-cat("C) P(X >= 5) =", round(prob_c, 4), "\n")
-
-# --- D) P(X >= 10) en las próximas 2 horas (lambda = 16) ---
-
-prob_d <- 1 - ppois(9, lambda_2h)
-cat("D) P(X >= 10) en 2 horas =", round(prob_d, 4), "\n")
-
-resultados <- data.frame(
-  Parte = c("A", "B", "C", "D"),
-  Evento = c("X = 5 (1h)", "X <= 5 (1h)", "X >= 5 (1h)", "X >= 10 (2h)"),
-  Probabilidad = round(c(prob_a, prob_b, prob_c, prob_d), 4)
-)
-print(resultados)
-```
+## Conclusión
+La distribución de Poisson sirve para contar eventos en intervalos de tiempo o espacio cuando estos ocurren de manera aleatoria e independiente. Su parámetro principal es $\lambda$, que representa la frecuencia promedio esperada.
