@@ -1,0 +1,223 @@
+# Distribución normal o campana de Gauss
+
+## ¿Qué es la distribución normal?
+
+La distribución normal es una distribución de probabilidad continua que se utiliza para modelar variables cuyos valores se concentran alrededor de un promedio. Su gráfica tiene forma de campana y es simétrica respecto a la media.
+
+Es común encontrarla en variables como:
+
+- estaturas de una población,
+- pesos de personas u objetos,
+- calificaciones,
+- errores de medición,
+- tiempos de respuesta.
+
+La distribución normal es una de las distribuciones más importantes de la estadística porque muchos fenómenos naturales y sociales se aproximan a ella.
+
+## Parámetros
+
+Si una variable aleatoria $X$ sigue una distribución normal, se escribe:
+
+$$
+X \sim N(\mu, \sigma^2)
+$$
+
+donde:
+
+- $\mu$ = media o valor esperado,
+- $\sigma$ = desviación estándar,
+- $\sigma^2$ = varianza.
+
+La media determina el centro de la campana y la desviación estándar indica qué tan dispersos están los datos.
+
+## Función de densidad
+
+La función de densidad de la distribución normal es:
+
+$$
+f(x, \mu, \sigma) = \frac{1}{\sqrt{2\pi \sigma^2}}e^{-\left(\frac{x-\mu}{2\sigma^2}\right)^2}
+$$
+
+En una variable continua, la probabilidad se obtiene calculando el área bajo la curva en un intervalo. La probabilidad de obtener exactamente un valor es igual a cero:
+
+$$
+P(X = x) = 0
+$$
+
+## Propiedades
+
+La distribución normal cumple las siguientes propiedades:
+
+1. Es simétrica alrededor de la media $\mu$.
+2. La media, la mediana y la moda tienen el mismo valor.
+3. El área total bajo la curva es igual a 1.
+4. La curva se aproxima al eje horizontal, pero nunca lo toca.
+5. La mayor concentración de datos se encuentra cerca de la media.
+
+## Regla 68 - 95 - 99
+
+En una distribución normal se cumple aproximadamente que:
+
+- El 68% de los datos está entre $\mu - \sigma$ y $\mu + \sigma$.
+- El 95% de los datos está entre $\mu - 2\sigma$ y $\mu + 2\sigma$.
+- El 99% de los datos está entre $\mu - 3\sigma$ y $\mu + 3\sigma$.
+
+Esta regla permite estimar rápidamente la proporción de datos que se encuentra cerca de la media.
+
+## Distribución normal estándar
+
+La distribución normal estándar tiene media 0 y desviación estándar 1. Se representa como:
+
+$$
+Z \sim N(0,1)
+$$
+
+Para convertir un valor $X$ a un valor estándar $Z$, se utiliza la fórmula:
+
+$$
+Z = \frac{X - \mu}{\sigma}
+$$
+
+El valor $Z$ indica cuántas desviaciones estándar se encuentra $X$ por encima o por debajo de la media.
+
+## Ejemplo
+
+La estatura de un grupo de estudiantes se distribuye normalmente con media de 170 cm y desviación estándar de 8 cm.
+
+A) Probabilidad de que un estudiante mida menos de 180 cm
+
+Se identifican los valores:
+
+- $\mu = 170$
+- $\sigma = 8$
+- $X = 180$
+
+Primero se calcula el valor estandarizado:
+
+$$
+Z = \frac{180 - 170}{8} = 1.25
+$$
+
+Entonces se busca $P(Z < 1.25)$, cuyo valor aproximado es:
+
+$$
+P(X < 180) \approx 0.8944
+$$
+
+Por lo tanto, aproximadamente el 89.44% de los estudiantes mide menos de 180 cm.
+
+B) Probabilidad de que un estudiante mida entre 162 cm y 178 cm
+
+Se calculan los valores estandarizados:
+
+$$
+Z_1 = \frac{162 - 170}{8} = -1
+$$
+
+$$
+Z_2 = \frac{178 - 170}{8} = 1
+$$
+
+Por la regla de la distribución normal estándar:
+
+$$
+P(162 < X < 178) = P(-1 < Z < 1) \approx 0.6827
+$$
+
+La probabilidad es aproximadamente 68.27%.
+
+## Ejemplos en R
+
+```{r parametros}
+# Parámetros de la distribución
+media <- 170
+desviacion <- 8
+val <- 180
+
+# Densidad en x = 180
+dnorm(val, mean = media, sd = desviacion)
+
+# Probabilidad de que X sea menor que 180
+pnorm(val, mean = media, sd = desviacion)
+```
+
+```{r prob1}
+# Probabilidad de que X esté entre 162 y 178
+pnorm(178, mean = media, sd = desviacion) -
+
+  pnorm(162, mean = media, sd = desviacion)
+```
+
+```{r prob2}
+# Percentil 90 de la distribución
+qnorm(0.90, mean = media, sd = desviacion)
+
+# Generar 10 valores aleatorios con distribución normal
+set.seed(123)
+rnorm(10, mean = media, sd = desviacion)
+```
+
+```{r grafico}
+# Gráfica de la distribución normal
+x <- seq(media - 4 * desviacion, media + 4 * desviacion, length.out = 200)
+y <- dnorm(x, mean = media, sd = desviacion)
+
+plot(x, y,
+     type = "l",
+     main = "Distribución normal",
+     xlab = "Estatura (cm)",
+     ylab = "Densidad")
+```
+
+
+## Ejemplo de clase
+En un pueblo, los ingresos promedio de las personas es de 3,200,000 con una desviación estándar de 250,000.
+Se desea calcular las siguientes probabilidades:
+
+```{r ejem_clase_datos}
+media_pueblo <- 3200000
+desviacion_pueblo <- 250000
+```
+
+A) Cual es la probabilidad de que una persona gane mas de 2900000
+ $P(X > 2900000) = 1 - P(X < 2900000)$
+
+```{r ejem_clase_prob1}
+1 - pnorm(2900000, mean = media_pueblo, sd = desviacion_pueblo)
+```
+
+B) Cual es la probabilidad de que una persona de ese pueblo gane menos de 1500000
+ $P(X < 1500000)$
+
+```{r ejem_clase_prob2}
+pnorm(1500000, mean = media_pueblo, sd = desviacion_pueblo)
+```
+
+C) Cual es la probabilidad de que una persona de ese pueblo gane entre 2500000 y 3400000
+ $P(2500000 < X < 3400000) = P(X < 3400000) - P(X < 2500000)$
+```{r ejem_clase_prob3}
+pnorm(3400000, mean = media_pueblo, sd = desviacion_pueblo) -
+  pnorm(2500000, mean = media_pueblo, sd = desviacion_pueblo)
+```
+
+D) Cual es la probabilidad de que una persona de ese pueblo gane mas de 4000000
+ $P(X > 4000000) = 1 - P(X < 4000000)$
+```{r ejem_clase_prob4}
+1 - pnorm(4000000, mean = media_pueblo, sd = desviacion_pueblo)
+```
+
+E) Graficar la distribución de ingresos del pueblo
+```{r ejem_clase_grafico}
+x <- seq(media_pueblo - 4 * desviacion_pueblo,
+  media_pueblo + 4 * desviacion_pueblo,
+  length.out = 200
+)
+
+y <- dnorm(x, mean = media_pueblo, sd = desviacion_pueblo)
+
+plot(x, y,
+     type = "l",
+     main = "Distribución normal",
+     xlab = "Ingresos",
+     ylab = "Densidad")
+```

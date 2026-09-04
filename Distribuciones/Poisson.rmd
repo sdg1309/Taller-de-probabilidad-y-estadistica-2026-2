@@ -69,11 +69,8 @@ $$
 Es decir, hay aproximadamente 27.1% de probabilidad.
 
 ## Ejemplo en R
-```r
+```{r ejemplo-poisson}
 dpois(3, lambda = 4)
 ppois(3, lambda = 4)
 rpois(10, lambda = 4)
 ```
-
-## Conclusión
-La distribución de Poisson sirve para contar eventos en intervalos de tiempo o espacio cuando estos ocurren de manera aleatoria e independiente. Su parámetro principal es $\lambda$, que representa la frecuencia promedio esperada.

@@ -1,0 +1,154 @@
+# EJERCICIO PRACTICO 1 DE DISTRIBUCIO NORMAL
+
+En una planta de armado se diseña una operacion especifica la cual toma un tiempo promedio de 5 minutos.
+El gerente de la planta sospecha que para una operador en particular el tiempo promedio es diferente.
+EL genernte tima una muestra de 11 tiempos de operecion para este empleado y obtiene los siguientes resultados (en minutos):
+- 4.8
+- 5.6
+- 5.3
+- 5.2
+- 4.9
+- 4.7 
+- 5.7
+- 4.9
+- 5.7
+- 4.9
+- 4.6
+
+Si se supone que el tiempo de opereracion se encuentra encuentra modelado en forma adecuada por la distribucion normal.
+
+## Solución
+
+El gerente sospecha que el tiempo promedio del operador es diferente de 5 minutos. Por lo tanto, se realiza una prueba de hipótesis bilateral para la media.
+
+### 1. Hipótesis
+
+- Hipótesis nula: $H_0: \mu = 5$ minutos.
+- Hipótesis alternativa: $H_1: \mu \neq 5$ minutos.
+
+Como no se conoce la desviación estándar de la población y la muestra tiene 11 observaciones, se utiliza una prueba t de Student para una muestra. Se trabajará con un nivel de significancia de $\alpha = 0.05$.
+
+### 2. Estadísticos de la muestra
+
+Los tiempos observados son:
+
+$$
+4.8, 5.6, 5.3, 5.2, 4.9, 4.7, 5.7, 4.9, 5.7, 4.9, 4.6
+$$
+
+El tamaño de la muestra es $n=11$. Los estadísticos calculados son:
+
+$$
+\bar{x} = 5.1182 \text{ minutos}
+$$
+
+$$
+s = 0.4045 \text{ minutos}
+$$
+
+El error estándar es:
+
+$$
+SE = \frac{s}{\sqrt{n}} = \frac{0.4045}{\sqrt{11}} = 0.1220
+$$
+
+### 3. Estadístico de prueba
+
+Se utiliza:
+
+$$
+t = \frac{\bar{x} - \mu_0}{s/\sqrt{n}}
+$$
+
+Reemplazando los valores:
+
+$$
+t = \frac{5.1182 - 5}{0.1220} = 0.969
+$$
+
+Los grados de libertad son:
+
+$$
+gl = n - 1 = 10
+$$
+
+### 4. Valor p y decisión
+
+Para una prueba bilateral con 10 grados de libertad, el valor p es aproximadamente:
+
+$$
+p\text{-valor} \approx 0.355
+$$
+
+Como $0.355 > 0.05$, no se rechaza la hipótesis nula.
+
+### 5. Intervalo de confianza
+
+El intervalo de confianza del 95% para la media poblacional es aproximadamente:
+
+$$
+(4.846, 5.390) \text{ minutos}
+$$
+
+El valor de 5 minutos pertenece a este intervalo, lo cual coincide con la decisión de no rechazar $H_0$.
+
+### Conclusión
+
+Con un nivel de significancia del 5%, no existe evidencia estadística suficiente para afirmar que el tiempo promedio del operador sea diferente de 5 minutos. Aunque la media observada fue de 5.1182 minutos, esa diferencia puede explicarse por la variabilidad de la muestra.
+
+```{r}
+# Punto 1: hipótesis y nivel de significancia
+mu_0 <- 5
+alpha <- 0.05
+
+cat("H0: mu =", mu_0, "\n")
+cat("H1: mu !=", mu_0, "\n")
+cat("Nivel de significancia:", alpha, "\n")
+```
+
+```{r}
+# Punto 2: estadísticos de la muestra
+tiempos <- c(4.8, 5.6, 5.3, 5.2, 4.9, 4.7,
+            5.7, 4.9, 5.7, 4.9, 4.6)
+
+n <- length(tiempos)
+media <- mean(tiempos)
+desviacion <- sd(tiempos)
+error_estandar <- desviacion / sqrt(n)
+
+n
+media
+desviacion
+error_estandar
+```
+
+```{r}
+# Punto 3: estadístico de prueba
+t_estadistico <- (media - mu_0) / error_estandar
+grados_libertad <- n - 1
+
+cat("Estadístico t:", t_estadistico, "\n")
+cat("Grados de libertad:", grados_libertad, "\n")
+```
+
+```{r}
+# Punto 4: valor p y decisión
+valor_p <- 2 * pt(-abs(t_estadistico), df = grados_libertad)
+
+cat("Valor p:", valor_p, "\n")
+if (valor_p < alpha) {
+  cat("Decisión: rechazar H0\n")
+} else {
+  cat("Decisión: no rechazar H0\n")
+}
+```
+
+```{r}
+# Punto 5: intervalo de confianza del 95%
+intervalo <- t.test(tiempos,
+                     mu = mu_0,
+                     alternative = "two.sided",
+                     conf.level = 0.95)$conf.int
+
+intervalo
+```
