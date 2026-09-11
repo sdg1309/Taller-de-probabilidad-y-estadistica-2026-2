@@ -1,0 +1,141 @@
+# Aproximación de la distribución binomial a la normal
+
+## Fundamento
+
+Una distribución binomial puede aproximarse mediante una distribución normal cuando $np$ y $nq$ son suficientemente grandes, generalmente cuando ambos son mayores o iguales que 5.
+
+Si:
+
+$$
+X \sim Binomial(n,p)
+$$
+
+entonces:
+
+$$
+Y \sim Normal(\mu, \rho)
+$$
+
+donde:
+
+- $q = 1-p$,
+- $\mu = np$ es la media,
+- $\rho = \sqrt{npq}$ es la desviación estándar.
+
+Como la binomial es discreta y la normal es continua, se aplica una corrección de continuidad de $0.5$:
+
+- $P(X > k) \approx P(Y > k + 0.5)$
+- $P(X < k) \approx P(Y < k - 0.5)$
+- $P(a \leq X \leq b) \approx P(a - 0.5 < Y < b + 0.5)$
+
+## Ejercicio
+
+En una fábrica se sabe que el 30% de los productos presenta una característica específica. Se seleccionan 100 productos al azar. ¿Cuál es la probabilidad de que:
+
+A) Más de 35 productos tengan la característica.
+
+B) Menos de 15 productos tengan la característica.
+
+C) Entre 25 y 30 productos tengan la característica.
+
+### Datos
+
+$$
+n=100, \qquad p=0.30, \qquad q=1-p=0.70
+$$
+
+$$
+\mu=np=100(0.30)=30
+$$
+
+$$
+\rho=\sqrt{npq}=\sqrt{100(0.30)(0.70)}=\sqrt{21}\approx4.583
+$$
+
+Por tanto, aproximamos $X \sim Binomial(100,0.30)$ mediante $Y \sim Normal(30,4.583)$.
+
+### A) Más de 35 productos
+
+“Más de 35” significa $X \geq 36$. Con la corrección de continuidad:
+
+$$
+P(X>35)=P(X\geq36)\approx P(Y>35.5)
+$$
+
+Estandarizando:
+
+$$
+z=\frac{35.5-30}{4.583}\approx1.201
+$$
+
+$$
+P(X>35)\approx P(Z>1.201)\approx0.115
+$$
+
+La probabilidad es aproximadamente **0.115**, es decir, **11.5%**.
+
+### B) Menos de 15 productos
+
+“Menos de 15” significa $X \leq 14$. Con la corrección de continuidad:
+
+$$
+P(X<15)=P(X\leq14)\approx P(Y<14.5)
+$$
+
+$$
+z=\frac{14.5-30}{4.583}\approx-3.382
+$$
+
+$$
+P(X<15)\approx P(Z<-3.382)\approx0.00036
+$$
+
+La probabilidad es aproximadamente **0.00036**, es decir, **0.036%**.
+
+### C) Entre 25 y 30 productos
+
+Interpretando “entre 25 y 30” como incluyendo ambos extremos:
+
+$$
+P(25\leq X\leq30)\approx P(24.5<Y<30.5)
+$$
+
+Los valores estandarizados son:
+
+$$
+z_1=\frac{24.5-30}{4.583}\approx-1.201,
+\qquad
+z_2=\frac{30.5-30}{4.583}\approx0.109
+$$
+
+Entonces:
+
+$$
+P(25\leq X\leq30)\approx P(-1.201<Z<0.109)
+$$
+
+$$
+P(25\leq X\leq30)\approx0.5436-0.1149\approx0.429
+$$
+
+La probabilidad es aproximadamente **0.429**, es decir, **42.9%**.
+
+```{r aprox}
+n <- 100
+p <- 0.30
+q <- 1 - p
+mu <- n * p
+rho <- sqrt(n * p * q)
+
+# A) Más de 35: X >= 36, usando 35.5 como límite
+prob_a <- pnorm(35.5, mean = mu, sd = rho, lower.tail = FALSE)
+
+# B) Menos de 15: X <= 14, usando 14.5 como límite
+prob_b <- pnorm(14.5, mean = mu, sd = rho)
+
+# C) Entre 25 y 30, usando 24.5 y 30.5 como límites
+prob_c <- pnorm(30.5, mean = mu, sd = rho) -
+	pnorm(24.5, mean = mu, sd = rho)
+
+c(A = prob_a, B = prob_b, C = prob_c)
+```

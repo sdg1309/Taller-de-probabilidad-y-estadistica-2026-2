@@ -131,6 +131,7 @@ pbinom(ex, size = en, prob = p)
 rbinom(10, size = en, prob = p)
 ```
 
+
 ## Ejemplos de clase
 1) El 60% les gusta cierta marca de gaseosas, se selecciona 8 personas de dicha universidad, cual es la probabilidad de: A) a 3 personas les guste la gaseosa. B)a lo sumo a 3 personas les gusta la gaseosa. C)al men os a 3 personas les gusta la gaseosa
 
@@ -151,7 +152,9 @@ p_c <- 1 - pbinom(2, size = n, prob = p)
 p_c
 ```
 
+
 2) Una enfermedad tiene una tasa de mortalidad del 70% a un hospital llegan 15 pacientes con dicha enfermedad. cual es la probabilidad de. A) 8 personas amanezcan muertas, B) a lo sumo 8 pacientes amanezcan muertos. C) almenos 8 pacientes se mueran, D) todos se mueran. E) ninguno se muera
+
 ```{r ejemploC2}
 n <- 15
 p <- 0.7

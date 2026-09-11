@@ -1,0 +1,86 @@
+# Aproximación de Poisson a la normal
+
+## Planteamiento
+
+El número de clientes que llega a un banco por hora sigue una distribución de Poisson con media de 150 personas. Si $X$ representa el número de clientes que llegan en una hora, entonces:
+
+$$
+X \sim Poisson(\lambda=150)
+$$
+
+Se desea calcular:
+
+$$
+P(X>200)
+$$
+
+## ¿Cómo funciona la aproximación?
+
+Cuando el parámetro $\lambda$ de una distribución de Poisson es grande, su forma se parece cada vez más a la de una distribución normal. Por eso se puede utilizar la aproximación:
+
+$$
+X \approx Y \sim Normal(\mu,\sigma)
+$$
+
+donde los parámetros de la distribución normal son:
+
+$$
+\mu=\lambda=150
+$$
+
+$$
+\sigma=\sqrt{\lambda}=\sqrt{150}\approx12.247
+$$
+
+La media de la normal coincide con la media de Poisson y su varianza también coincide, porque para Poisson $Var(X)=\lambda$.
+
+Como la distribución de Poisson es discreta y la normal es continua, se aplica una corrección de continuidad de $0.5$. “Más de 200” significa $X\geq201$, por lo que:
+
+$$
+P(X>200)=P(X\geq201)\approx P(Y>200.5)
+$$
+
+## Cálculo
+
+Estandarizamos el límite:
+
+$$
+z=\frac{200.5-150}{\sqrt{150}}
+\approx\frac{50.5}{12.247}
+\approx4.123
+$$
+
+Entonces:
+
+$$
+P(X>200)\approx P(Y>200.5)
+$$
+
+$$
+P(X>200)\approx P(Z>4.123)
+$$
+
+$$
+P(X>200)\approx1-\Phi(4.123)\approx0.000019
+$$
+
+Por lo tanto, la probabilidad de que lleguen más de 200 clientes durante la próxima hora es aproximadamente:
+
+$$
+\boxed{P(X>200)\approx0.000019}
+$$
+
+Es decir, aproximadamente **0.0019%**.
+
+## Cálculo en R
+
+```{r aprox}
+lambda <- 150
+mu <- lambda
+sigma <- sqrt(lambda)
+
+# Más de 200 equivale a X >= 201.
+# Se usa 200.5 por la corrección de continuidad.
+probabilidad <- pnorm(200.5, mean = mu, sd = sigma, lower.tail = FALSE)
+probabilidad
+```
